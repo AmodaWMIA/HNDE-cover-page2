@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cover Page Generator
+  
+</title>
+
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    font-family:'Times New Roman', Times, serif;
+    background: #69ccd8;
+    text-transform: uppercase;
+  }
+
+  .app {
+    max-width: 980px;
+    margin: 8px auto;
+    padding: 8px;
+  }
+
+  /* A4 page */
+  .page {
+    width: 210mm;
+    height: 297mm;
+    background: white;
+    box-sizing: border-box;
+    margin: auto;
+    position: relative;
+    page-break-after: avoid;
+    page-break-before: avoid;
+    page-break-inside: avoid;
+    overflow-wrap: break-word;
+    font-family: 'Times New Roman', Times, serif;
+  }
+
+  .page-inner {
+    position: absolute;
+    left: 25mm;
+    top: 10mm;
+    right: 10mm;
+    bottom: 10mm;
+    border: 1px solid #000;
+    padding: 4mm;
+    box-sizing: border-box;
+   
+  }
+
+  /* Top-right and bottom-right aligned from vertical center */
+  .top-right, .bottom-right {
+    position: absolute;
+    left: 50%;
+    text-align: left;
+    white-space: pre-line;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  .top-right { top:-4mm; font-size:25px; line-height: 1.2;  font-family: 'Times New Roman', Times, serif;}
+  .bottom-right { bottom: -5mm; font-size: 11px; line-height: 1.5; }
+
+  /* Tables for aligned colons */
+  .top-right table, .middle-left table, .bottom-right table {
+    border-collapse: collapse;
+    font-family:'Times New Roman', Times, serif;
+  }
+  .top-right td:first-child,  .bottom-right td:first-child {
+    white-space:pre-line;
+    padding-right: 2mm;
+  }
+  .top-right td:last-child, .middle-left td:last-child, .bottom-right td:last-child {
+    text-align: left;
+  }
+
+  .center-title {
+    position:relative;
+    left: 50%;
+    
+    transform: translate(-50%,-50%);
+    top: calc(10mm + 90mm);
+    font-size: 39px;
+    text-decoration: underline;text-underline-offset: 0.7;
+    text-align:center;
+    line-height: 1.5;
+    padding: 0 5mm;
+    font-family: 'Times New Roman', Times, serif;
+   
+  }
+
+  .middle-left {
+    position: absolute;
+    left: 5mm;
+    top: calc(10mm + 110mm);
+    font-size: 15px;
+    line-height: 1.5;
+    white-space: pre-line;
+    font-family: 'Times New Roman', Times, serif;
+  }
+
+  .middle-right {
+    position: absolute;
+    right: 20mm;
+    top: calc(10mm + 110mm);
+    font-size: 15px;
+    line-height: 1.5;
+    text-align: left;
+    white-space: pre-line;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  .bottom-right {font-size: 15px; }
+
+  @media (max-width: 900px) {
+  .page { 
+    width: 210mm;      /* keep exact A4 size */
+    height: 297mm;     /* no aspect-ratio scaling */
+    margin:0 auto;
+    padding: 0;
+    box-shadow: none;
+
+  }
+
+  /* keep positions in mm */
+  .top-right { top: 0mm; }
+  .center-title { top: 125mm; }       /* ~40% of 297mm */
+  .middle-left { top: 160mm; left: 5mm; }
+  .middle-right { top: 160mm; right: 0mm; }
+  .bottom-right { bottom: 5mm; }
+}
+
+  /* Form */
+  .form { background: #fff; border-radius: 8px; padding: 12px; margin: 10px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .form label { font-size: 14px; display:block; margin-top:8px; }
+  .form input[type="text"], .form textarea, .form select, .form input[type="date"] {
+    width:100%; padding:8px; box-sizing:border-box; font-family: "Times New Roman", Times, serif; text-transform:uppercase; margin-top:6px; font-size:14px;
+  }
+  .form textarea { min-height:90px; resize:vertical; }
+  .btn{ display:block; width:100%; padding:12px; margin-top:10px; border:red; background:#10d050; color:#501502; border-radius:8px; font-size:16px; cursor: pointer;display: inline-block;text-align: center;transition: background-color 0.3s ease,transform 0.2s ease;}
+  .row { display:flex; gap:8px; }
+  .row .col { flex:1; }
+  .smallmuted { font-size:12px; color:#2b37dd; margin-top:6px; }
+  td {
+  word-wrap: break-word;   /* old but still works */
+  overflow-wrap: break-word; /* modern */
+  max-width: 200px;         /* set a width for the cell */
+}
+  .tb1 {
+    width: 100%;}
+
+    .top-right td {
+  max-width: 80mm;       /* Adjust to fit your layout */
+  word-wrap: break-word; /* old but widely supported */
+  overflow-wrap: break-word; /* modern */
+}
+
+
+</style>
+</head>
+<body>
+<div class="app">
+  <h2 style="margin:6px 0 8px 0;">Cover Page Generator</h2>
+  <br/>
+  <h4><b>Instructions:</b>*Pls fill the below form with your details,then press the download button<br/>we recommend to pinch off your screen then the form will be nicely adjust to your screen...This model is still developing pls forgive us if there is any error and your feedbacks are very important to us.Thankyou for using cover page creating buddy!</h4>
+
+  <div class="page" id="pagePreview">
+    <div class="page-inner" id="pageInner">
+      <div class="top-right" id="topRightBlock"></div>
+      <div class="center-title" id="centerTitle"></div>
+      <div class="middle-left" id="middleLeftBlock"></div>
+      <div class="middle-right" id="middleRightBlock"></div>
+      <div class="bottom-right" id="bottomRightBlock"></div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="form" id="form">
+    <label>
+      <select>
+      <option>Experiment No</option>
+      <option>practical no</option>
+      </select>
+    </label>
+    <input id="expNo" type="text" placeholder="0x">
+
+    <label>Subject name</label>
+    <textarea id="subject" type="text" placeholder="PROPERTIES OF ENGINEERING MATERIALS"></textarea>
+
+    <label>Subject code</label>
+    <input id="subjectCode" type="text" placeholder="ENxxxx">
+
+    <label>Experiment title (main center)</label>
+    <input id="expTitle" type="text" placeholder="FORCE POLYGON">
+
+    <label>Instructed by</label>
+    <input id="instructor" type="text" placeholder="MR.xxxxxx">
+
+    <label>Group</label>
+    <input id="group" type="text" placeholder="G 0x">
+
+    <label>Group members (one per line)</label>
+    <textarea id="members" placeholder="COL/xx/2324/F/xxx&#10;COL/xx/2324/F/xxx"></textarea>
+
+    <label>Name</label>
+    <textarea id="name" type="text" placeholder="W.M.I.A.JAYASEKARA"></textarea>
+
+    <label>Reg No</label>
+    <input id="regNo" type="text" placeholder="COL/xx/2324/F/xxx">
+
+    <label>Course</label>
+    <select id="course">
+      <option>HNDE EE</option>
+      <option>HNDE ME</option>
+      <option>HNDE BSE</option>
+      <option>HNDE CE</option>
+    </select>
+
+    <div class="row">
+      <div class="col">
+        <label>Date of Ins</label>
+        <input id="dateIns" type="date">
+      </div>
+      <div class="col">
+        <label>Date of Sub</label>
+        <input id="dateSub" type="date">
+      </div>
+    </div>
+
+    <div class="smallmuted">Preview updates live while typing. Click Download PDF to save A4 PDF.</div>
+   <div> <button class="btn" id="downloadBtn" >Download PDF</button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+<script>
+const el = id => document.getElementById(id);
+
+function formatDateDDMMYYYY(iso) {
+  if (!iso) return '';
+  const [y,m,d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function updatePreview() {
+  // Top-right
+  const topBlock = `
+    <table>
+      <tr><td >Experiment NO: ${el('expNo').value || ''}</td></tr>
+      <tr><td style="overflow-wrap: break-word;">${el('subject').value || ''}</td></tr>
+      <tr><td>${el('subjectCode').value || ''}</td></tr>
+    </table>
+  `;
+  el('topRightBlock').innerHTML = topBlock;
+
+  // Center title
+  el('centerTitle').textContent = el('expTitle').value || '';
+
+  // Middle-left
+  const membersRaw = el('members').value || '';
+  const membersList = membersRaw.split(/\r?\n/).map(s => s.trim()).filter(Boolean).join('\n');
+  const leftBlock = `
+    <table>
+      <tr><td>INSTRUCTED BY</td><td>: ${el('instructor').value || ''}</td></tr>
+      <tr><td>GROUP</td><td>: ${el('group').value || ''}</td></tr>
+      <tr><td>GROUP MEMBERS</td><td>:</td></tr> ${membersList.split('\n').map(m => `<tr><td></td><td>${m}</td></tr>`).join('')}
+    </table>
+  `;
+  el('middleLeftBlock').innerHTML = leftBlock;
+
+  // Middle-right (optional)
+  el('middleRightBlock').textContent = '';
+
+  // Bottom-right
+  const bottomBlock = `
+    <table>
+      <tr><td>NAME</td><td>: ${el('name').value || ''}</td></tr>
+      <tr><td>REG NO</td><td>: ${el('regNo').value || ''}</td></tr>
+      <tr><td>COURSE</td><td>: ${el('course').value || ''}</td></tr>
+      <tr><td>DATE OF INS</td><td>: ${formatDateDDMMYYYY(el('dateIns').value)}</td></tr>
+      <tr><td>DATE OF SUB</td><td>: ${formatDateDDMMYYYY(el('dateSub').value)}</td></tr>
+    </table>
+  `;
+  el('bottomRightBlock').innerHTML = bottomBlock;
+}
+
+// Event listeners
+[...document.querySelectorAll('#form input, #form textarea, #form select')]
+  .forEach(inp => inp.addEventListener('input', updatePreview));
+
+// Initial render
+updatePreview();
+
+// PDF download
+document.getElementById('downloadBtn').addEventListener('click', async () => {
+  // Update preview first (your existing function)
+  updatePreview();
+
+  // Get the element to export
+  const element = document.getElementById('pagePreview');
+
+  // Wait for fonts and images to fully load before rendering
+  await document.fonts.ready;
+  await new Promise(resolve => setTimeout(resolve, 500)); // slight delay for safety
+
+  // Set fixed layout to prevent mobile reflow
+  element.style.width = '210mm';
+  element.style.height = '297mm';
+  element.style.margin = '0 auto';
+
+  // PDF options
+  const opt = {
+    margin: 0,
+    filename: 'cover_page.pdf',
+    image: { type: 'jpeg', quality: 1 },
+    html2canvas: {
+      scale: 2,        // high resolution for mobile
+      useCORS: true,
+      allowTaint: true,
+      scrollX: 0,      // prevent horizontal shift
+      scrollY: 0
+    },
+    jsPDF: {
+      unit: 'mm',
+      format: 'a4',
+      orientation: 'portrait'
+    },
+    pagebreak: { mode: ['avoid-all'] }
+  };
+
+  try {
+    await html2pdf().set(opt).from(element).save();
+  } catch (err) {
+    console.error(err);
+    alert('PDF generation failed: ' + (err && err.message ? err.message : err));
+  }
+});
+</script>
+</body>
+</html>
